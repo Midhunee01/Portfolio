@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Midhun Raj • Portfolio</title>
+  <meta name="description" content="Portfolio of Midhun Raj — AI • Cloud Security • Cybersecurity. Motion-rich UI with modern tools." />
+  <meta name="theme-color" content="#00f5a0" />
+
+  <!-- Trendy variable fonts (modern & readable) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Manrope:wght@300;400;600;800&family=Space+Grotesk:wght@400;600;700&family=Sora:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <script defer src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- GSAP + ScrollTrigger -->
+  <script defer src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script defer src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Lenis (smooth scrolling) -->
+  <script defer src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+  <!-- VanillaTilt (3D hover) -->
+  <script defer src="https://unpkg.com/vanilla-tilt@1.8.1/dist/vanilla-tilt.min.js"></script>
+
+  <!-- Chart.js (skill radar) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root{
+      --bg: #0f1014;
+      --bg-2:#13141a;
+      --text:#e8e9ef;
+      --muted:#aeb0bb;
+      --card:#151724;
+      --brand:#00f5a0; /* neon green */
+      --brand-2:#00d9f5; /* aqua */
+      --accent:#f500c6; /* neon pink */
+      --ring: 0 0 0 2px var(--brand);
+      --shadow: 0 12px 40px rgba(0,0,0,.45);
+    }
+    .light{
+      --bg:#f7f8fd;
+      --bg-2:#ffffff;
+      --text:#14151a;
+      --muted:#535869;
+      --card:#ffffff;
+      --shadow: 0 12px 40px rgba(0,0,0,.08);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0; font-family: Inter, Manrope, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text); background:
+        radial-gradient(1200px 800px at 90% -10%, rgba(0,245,160,.12), transparent 60%),
+        radial-gradient(1000px 600px at -10% 110%, rgba(245,0,198,.10), transparent 60%),
+        linear-gradient(180deg, #0b0c10, var(--bg));
+      overflow-x:hidden;
+    }
+
+    /* --- Custom cursor --- */
+    .cursor{position:fixed; top:0; left:0; width:18px; height:18px; border:2px solid var(--brand); border-radius:50%; pointer-events:none; z-index:9999; mix-blend-mode:difference; transform:translate(-50%,-50%); transition: transform .06s ease-out, width .2s, height .2s, background .2s;}
+    .cursor--dot{position:fixed; top:0; left:0; width:6px; height:6px; background:var(--brand); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); mix-blend-mode:screen}
+    .cursor-grow{width:56px; height:56px; background:rgba(0,245,160,.12)}
+
+    /* --- Header --- */
+    header{position:sticky; top:0; z-index:40; backdrop-filter:saturate(140%) blur(12px); background:linear-gradient(180deg, rgba(15,16,20,.85), rgba(15,16,20,.45) 70%, transparent); border-bottom:1px solid rgba(255,255,255,.06)}
+    .nav{max-width:1180px; margin:0 auto; padding:14px 18px; display:flex; align-items:center; justify-content:space-between}
+    .brand{display:flex; gap:10px; align-items:center; font-weight:800; letter-spacing:.6px}
+    .brand .logo{width:34px; height:34px; border-radius:10px; background:conic-gradient(from var(--angle), var(--brand), var(--brand-2), var(--accent), var(--brand)); box-shadow:0 0 40px rgba(0,245,160,.35)}
+    @property --angle { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+    @keyframes spin { to { --angle: 360deg; } }
+    .brand .logo{animation:spin 6s linear infinite}
+    nav a{color:var(--muted); text-decoration:none; margin:0 10px; padding:8px 10px; border-radius:10px; transition:color .2s, background .2s}
+    nav a:hover{color:var(--text); background:rgba(255,255,255,.06)}
+    .actions{display:flex; align-items:center; gap:10px}
+    .btn{display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); color:var(--text); cursor:pointer; box-shadow:var(--shadow); transition:transform .15s ease, background .2s, border-color .2s}
+    .btn:hover{transform:translateY(-2px); border-color:rgba(255,255,255,.3)}
+    .btn--primary{background:linear-gradient(135deg, rgba(0,245,160,.2), rgba(0,217,245,.2)); border-color:rgba(0,245,160,.35)}
+
+    /* --- Sections --- */
+    section{max-width:1180px; margin:0 auto; padding:90px 18px}
+
+    /* --- Hero --- */
+    .hero{display:grid; grid-template-columns:1.1fr .9fr; gap:28px; align-items:center; min-height:74vh}
+    .badge{display:inline-flex; gap:8px; align-items:center; padding:6px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.18); color:var(--muted); background:rgba(255,255,255,.04)}
+    h1{font-family: "Space Grotesk", Inter, sans-serif; font-size: clamp(36px, 5vw, 68px); line-height:1.05; margin:12px 0 6px}
+    .subtitle{font-family:Sora, Inter, sans-serif; font-weight:400; color:var(--muted); font-size: clamp(15px, 2.2vw, 18px)}
+    .cta{display:flex; gap:12px; margin-top:22px}
+    .cta .btn{font-weight:600}
+    .metrics{display:flex; gap:24px; margin-top:24px; color:var(--muted)}
+    .metrics b{display:block; font-size:26px; color:var(--text)}
+
+    /* --- Hero Visual --- */
+    .visual{position:relative; height:440px; border-radius:22px; background:radial-gradient(120% 120% at 10% 20%, rgba(0,245,160,.25), transparent 40%), linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); overflow:hidden; box-shadow: 0 10px 60px rgba(0,0,0,.35)}
+    .blob{position:absolute; inset:-20% -20% auto auto; width:160%; height:160%; filter:blur(42px); background:conic-gradient(from var(--angle), rgba(0,245,160,.6), rgba(0,217,245,.6), rgba(245,0,198,.6), rgba(0,245,160,.6)); animation:spin 16s linear infinite; opacity:.65; mix-blend-mode:screen}
+    .grid{position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px); background-size:40px 40px; transform:perspective(800px) rotateX(55deg) translateY(-60px); transform-origin:top}
+    .float{position:absolute; inset:auto 20px 20px auto; display:flex; gap:10px}
+    .float .chip{padding:10px 12px; border-radius:12px; background:rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.12); backdrop-filter: blur(6px)}
+
+    /* --- Section titles --- */
+    .stitle{font-family:"Space Grotesk"; font-size:30px; margin-bottom:16px}
+
+    /* --- Marquee --- */
+    .marquee{overflow:hidden; border:1px solid rgba(255,255,255,.08); border-radius:14px; background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02))}
+    .marquee-track{display:flex; gap:36px; padding:12px 18px; animation:marq 26s linear infinite; white-space:nowrap}
+    @keyframes marq{ from { transform: translateX(0);} to { transform: translateX(-50%);} }
+    .pill{display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.10); color:var(--muted)}
+
+    /* --- Projects --- */
+    .projects{display:grid; grid-template-columns:repeat(3,1fr); gap:18px}
+    .card{position:relative; background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:18px; overflow:hidden; padding:14px; box-shadow:var(--shadow)}
+    .card .thumb{height:160px; border-radius:12px; background:linear-gradient(135deg, rgba(0,217,245,.25), rgba(245,0,198,.25)); display:grid; place-items:center; color:#0f0f12; font-weight:800; letter-spacing:1px}
+    .card h3{margin:12px 0 6px}
+    .tags{display:flex; gap:8px; flex-wrap:wrap}
+    .tag{font-size:12px; padding:6px 8px; border-radius:999px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); color:var(--muted)}
+    .card .actions{justify-content:space-between}
+
+    /* --- Tools --- */
+    .tool-grid{display:grid; grid-template-columns:repeat(6,1fr); gap:12px}
+    .tool{display:flex; align-items:center; gap:10px; padding:12px; border-radius:12px; border:1px dashed rgba(255,255,255,.14); background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02))}
+
+    /* --- Skills --- */
+    .skills{display:grid; grid-template-columns:1.2fr .8fr; gap:22px; align-items:center}
+
+    /* --- Timeline --- */
+    .timeline{border-left:2px dashed rgba(255,255,255,.16); padding-left:12px}
+    .titem{margin:16px 0; position:relative}
+    .titem::before{content:""; position:absolute; left:-12px; top:4px; width:10px; height:10px; border-radius:50%; background:var(--brand)}
+
+    /* --- Contact --- */
+    form label{display:block; font-size:14px; color:var(--muted); margin:8px 0}
+    input, textarea{width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:transparent; color:var(--text)}
+
+    /* --- Footer --- */
+    footer{padding:60px 18px 100px; background:linear-gradient(180deg, transparent, rgba(0,0,0,.3)); text-align:center; color:var(--muted)}
+
+    /* --- Utilities --- */
+    .theme-toggle{position:fixed; right:18px; bottom:18px; z-index:60}
+
+    /* --- Command palette --- */
+    .cmd{position:fixed; inset:0; background:rgba(0,0,0,.5); display:none; align-items:center; justify-content:center; z-index:70}
+    .cmd.open{display:flex}
+    .cmd .panel{width:min(700px, 92vw); background:var(--card); border:1px solid rgba(255,255,255,.12); border-radius:16px; box-shadow:var(--shadow)}
+    .cmd input{width:100%; padding:16px; font-size:16px; border:none; outline:none; background:transparent; color:var(--text)}
+    .cmd .results{max-height:320px; overflow:auto; border-top:1px solid rgba(255,255,255,.08)}
+    .cmd .row{display:flex; align-items:center; gap:12px; padding:12px 16px; cursor:pointer}
+    .cmd .row:hover{background:rgba(255,255,255,.06)}
+
+    /* --- Toast --- */
+    .toast{position:fixed; left:50%; transform:translateX(-50%) translateY(40px); bottom:-80px; background:var(--card); border:1px solid rgba(255,255,255,.12); padding:10px 14px; border-radius:10px; color:var(--text); z-index:80; transition:bottom .3s ease}
+    .toast.show{bottom:20px}
+
+    /* --- Responsive --- */
+    @media (max-width: 980px){
+      .hero{grid-template-columns:1fr;}
+      .projects{grid-template-columns:1fr 1fr}
+      .skills{grid-template-columns:1fr}
+      .tool-grid{grid-template-columns:1fr 1fr 1fr}
+    }
+    @media (max-width: 560px){
+      .projects{grid-template-columns:1fr}
+      .tool-grid{grid-template-columns:1fr 1fr}
+    }
+  </style>
+</head>
+<body>
+  <!-- custom cursors -->
+  <div class="cursor" aria-hidden="true"></div>
+  <div class="cursor--dot" aria-hidden="true"></div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="nav">
+      <div class="brand"><div class="logo" aria-hidden="true"></div> <span style="font-family:'Plus Jakarta Sans', Inter, sans-serif">MIDHUN RAJ</span></div>
+      <nav>
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="actions">
+        <button class="btn btn--primary" id="downloadCV" aria-label="Download resume"><i data-lucide="download"></i> Resume</button>
+        <button class="btn" id="openCmd" aria-label="Open command palette"><kbd>Ctrl</kbd>+<kbd>K</kbd></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div>
+      <span class="badge"><i data-lucide="sparkles"></i> AI • Cloud • Cybersecurity</span>
+      <h1>Hi, I’m <span style="color:var(--brand)">Midhun</span> — passionate about Cybersecurity and Ethical Hacking.</h1>
+      <p class="subtitle">Bachelor of Computer Applications (BCA) student at Srinivas University with a focus on Artificial Intelligence, Cloud Computing, and Data Analytics. I have a keen interest in Cybersecurity and Ethical Hacking and aim to apply my technical knowledge to build secure and efficient IT solutions. I am eager to learn, grow, and contribute to a dynamic organization.</p>
+      <div class="cta">
+        <a class="btn btn--primary" href="#projects"><i data-lucide="bolt"></i> View Projects</a>
+        <button class="btn" id="copyEmail"><i data-lucide="copy"></i> Copy Email</button>
+      </div>
+      <div class="metrics">
+        <div><b id="countProjects">0</b> Projects</div>
+        <div><b id="countCerts">0</b> Certifications</div>
+        <div><b id="countCups">0</b> Coffee / Night</div>
+      </div>
+    </div>
+    <div class="visual">
+      <div class="blob"></div>
+      <div class="grid"></div>
+      <div class="float">
+        <div class="chip">OWASP • Nmap</div>
+        <div class="chip">React • Node</div>
+        <div class="chip">AWS • S3 • EC2</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee (logos/skills) -->
+  <section>
+    <div class="marquee" aria-label="highlights">
+      <div class="marquee-track" id="marqueeTrack">
+        <span class="pill"><i data-lucide="shield"></i> Ethical Hacking</span>
+        <span class="pill"><i data-lucide="cpu"></i> JavaScript/TypeScript</span>
+        <span class="pill"><i data-lucide="boxes"></i> React • Next.js</span>
+        <span class="pill"><i data-lucide="cloud"></i> AWS • EC2 • S3</span>
+        <span class="pill"><i data-lucide="git-branch"></i> Git/GitHub</span>
+        <span class="pill"><i data-lucide="rocket"></i> GSAP Motion</span>
+        <!-- duplicate for seamless loop -->
+        <span class="pill"><i data-lucide="shield"></i> Ethical Hacking</span>
+        <span class="pill"><i data-lucide="cpu"></i> JavaScript/TypeScript</span>
+        <span class="pill"><i data-lucide="boxes"></i> React • Next.js</span>
+        <span class="pill"><i data-lucide="cloud"></i> AWS • EC2 • S3</span>
+        <span class="pill"><i data-lucide="git-branch"></i> Git/GitHub</span>
+        <span class="pill"><i data-lucide="rocket"></i> GSAP Motion</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <h2 class="stitle">About</h2>
+    <p class="subtitle" style="max-width:840px">I enjoy turning complex problems into elegant products with delightful micro‑interactions. Focus areas: <b>modern frontend</b>, <b>secure full‑stack</b>, and <b>cloud‑native</b> deployments. I care about performance, accessibility, and tasteful motion ans am a Bachelor of Computer Applications (BCA) student at Srinivas University with a focus on Artificial Intelligence, Cloud Computing, and Data Analytics. I have a keen interest in Cybersecurity and Ethical Hacking and aim to apply my technical knowledge to build secure and efficient IT solutions. I am eager to learn, grow, and contribute to a dynamic organization</p>
+    <div class="cta" style="margin-top:14px">
+      <button class="btn" id="readMore"><i data-lucide="book-open"></i> Read more</button>
+      <button class="btn" id="surprise"><i data-lucide="sparkle"></i> Click me</button>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <h2 class="stitle">Featured Projects</h2>
+    <div class="projects">
+      <!-- Card 1 -->
+      <article class="card" data-tilt data-tilt-max="10" data-tilt-speed="400">
+        <div class="thumb">AI Auth Dashboard</div>
+        <h3>Secure Admin Portal</h3>
+        <p class="subtitle">Role‑based access, JWT rotation, anomaly detection, and audit trails. GSAP‑powered UI.</p>
+        <div class="tags">
+          <span class="tag">React</span>
+          <span class="tag">Node</span>
+          <span class="tag">PostgreSQL</span>
+          <span class="tag">GSAP</span>
+        </div>
+        <div class="actions">
+          <a class="btn" href="#" data-demo><i data-lucide="globe"></i> Live</a>
+          <a class="btn" href="#" data-repo><i data-lucide="github"></i> Code</a>
+        </div>
+      </article>
+      <!-- Card 2 -->
+      <article class="card" data-tilt data-tilt-max="10" data-tilt-speed="400">
+        <div class="thumb">Cloud FinOps</div>
+        <h3>AWS Cost Optimizer</h3>
+        <p class="subtitle">S3 lifecycle policies, rightsizing, budgets + alerts, and savings plan suggestions.</p>
+        <div class="tags">
+          <span class="tag">AWS</span>
+          <span class="tag">Lambda</span>
+          <span class="tag">Python</span>
+          <span class="tag">CDK</span>
+        </div>
+        <div class="actions">
+          <a class="btn" href="#" data-case><i data-lucide="file-text"></i> Case Study</a>
+          <a class="btn" href="#" data-private><i data-lucide="lock"></i> Private</a>
+        </div>
+      </article>
+      <!-- Card 3 -->
+      <article class="card" data-tilt data-tilt-max="10" data-tilt-speed="400">
+        <div class="thumb">Bug Bounty</div>
+        <h3>Recon & Reporting</h3>
+        <p class="subtitle">Automated subdomain enum, screenshots, and templated reporting with CVSS scoring.</p>
+        <div class="tags">
+          <span class="tag">Nmap</span>
+          <span class="tag">Amass</span>
+          <span class="tag">Python</span>
+          <span class="tag">CVSS</span>
+        </div>
+        <div class="actions">
+          <a class="btn" href="#" data-writeup><i data-lucide="book-open"></i> Write‑up</a>
+          <a class="btn" href="#" data-private><i data-lucide="lock"></i> Private</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section id="tools">
+    <h2 class="stitle">Tech I enjoy</h2>
+    <div class="tool-grid" aria-label="tools">
+      <div class="tool"><i data-lucide="cpu"></i> JavaScript/TypeScript</div>
+      <div class="tool"><i data-lucide="boxes"></i> React / Next.js</div>
+      <div class="tool"><i data-lucide="cloud"></i> AWS (S3, EC2, Lambda)</div>
+      <div class="tool"><i data-lucide="shield"></i> Security (OWASP, Nmap)</div>
+      <div class="tool"><i data-lucide="git-branch"></i> Git/GitHub</div>
+      <div class="tool"><i data-lucide="rocket"></i> GSAP Animations</div>
+      <div class="tool"><i data-lucide="database"></i> PostgreSQL</div>
+      <div class="tool"><i data-lucide="binary"></i> Python</div>
+      <div class="tool"><i data-lucide="dock"></i> Docker</div>
+      <div class="tool"><i data-lucide="terminal"></i> Linux</div>
+      <div class="tool"><i data-lucide="sparkles"></i> Accessibility</div>
+      <div class="tool"><i data-lucide="gauge"></i> Performance</div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <h2 class="stitle">Skills Snapshot</h2>
+    <div class="skills">
+      <div>
+        <div class="timeline">
+          <div class="titem"><h3>Frontend Engineering</h3><p class="subtitle">Semantic HTML, accessible components, state management, motion design.</p></div>
+          <div class="titem"><h3>Backend & Databases</h3><p class="subtitle">Node, Express, auth flows, Postgres, Prisma, REST + GraphQL fundamentals.</p></div>
+          <div class="titem"><h3>Cloud & DevOps</h3><p class="subtitle">Docker, CI/CD, AWS basics, monitoring and cost optimization.</p></div>
+          <div class="titem"><h3>Security Mindset</h3><p class="subtitle">Threat modeling, secure defaults, and routine scanning.</p></div>
+        </div>
+      </div>
+      <div>
+        <canvas id="skillRadar" width="420" height="420" aria-label="skill radar" role="img"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <h2 class="stitle">Let’s build something</h2>
+    <form id="contactForm" class="card" style="max-width:700px">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:13px">
+        <label> Name
+          <input name="name" placeholder="Your name" required>
+        </label>
+        <label> E-mail
+          <input name="email" type="email" placeholder="your@example.com" required>
+        </label>
+         <label>Phone
+   <input name="Phone" type="tel" placeholder="Phone Number" pattern="\d(10)" maxlength="10" required>
+ </label>
+      </div>
+      <label> Message
+        <textarea name="message" rows="3" placeholder="Tell me about your project..." required></textarea>
+      </label>
+      <div class="actions" style="margin-top:10px">
+        <button class="btn btn--primary" type="submit"><i data-lucide="send"></i> Send</button>
+        <button class="btn" type="reset"><i data-lucide="eraser"></i> Reset</button>
+      </div>
+    </form>
+  </section>
+
+  <footer>
+    <div class="cta" style="justify-content:center">
+      <button class="btn theme-toggle" id="themeToggle"><i data-lucide="sun"></i> Theme</button>
+    </div>
+    <p style="margin-top:30px">© <span id="year"></span> Midhun Raj • Built with ♥ and good coffee.</p>
+  </footer>
+
+  <!-- Command palette -->
+  <div class="cmd" id="cmd">
+    <div class="panel">
+      <input id="cmdInput" placeholder="Type a command: about, projects, skills, contact, theme" aria-label="Command input" />
+      <div class="results" id="cmdResults"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite">Copied!</div>
+
+  <script>
+    /* ===== Icons ===== */
+    window.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.createIcons(); });
+
+    /* ===== Smooth Scroll (Lenis) ===== */
+    const lenis = new Lenis({ smoothWheel: true });
+    function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+
+    /* ===== Custom Cursor ===== */
+    const c = document.querySelector('.cursor');
+    const d = document.querySelector('.cursor--dot');
+    window.addEventListener('mousemove', (e)=>{
+      c.style.top = d.style.top = e.clientY + 'px';
+      c.style.left = d.style.left = e.clientX + 'px';
+    });
+    document.querySelectorAll('a, button, .card').forEach(el=>{
+      el.addEventListener('mouseenter', ()=> c.classList.add('cursor-grow'));
+      el.addEventListener('mouseleave', ()=> c.classList.remove('cursor-grow'));
+    });
+
+    /* ===== Counters ===== */
+    const animateCount = (el, end, dur=1400)=>{
+      const start = 0; const startTime = performance.now();
+      function tick(now){
+        const p = Math.min((now - startTime) / dur, 1);
+        const val = Math.floor(start + (end - start) * (1 - Math.pow(1-p, 3)));
+        el.textContent = val; if(p < 1) requestAnimationFrame(tick);
+      } requestAnimationFrame(tick);
+    };
+    animateCount(document.getElementById('countProjects'), 12);
+    animateCount(document.getElementById('countCerts'), 6);
+    animateCount(document.getElementById('countCups'), 3);
+
+    /* ===== GSAP Scroll Reveals ===== */
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.utils.toArray('section').forEach((sec, i)=>{
+      gsap.from(sec.querySelectorAll('.stitle, .subtitle, .projects, .tool-grid, .skills, form'), {
+        opacity:0, y:30, duration:.8, stagger:.08,
+        scrollTrigger:{ trigger: sec, start:'top 80%' }
+      });
+    });
+
+    /* ===== VanillaTilt on cards ===== */
+    VanillaTilt.init(document.querySelectorAll('[data-tilt]'));
+
+    /* ===== Chart.js Radar ===== */
+    const ctx = document.getElementById('skillRadar');
+    new Chart(ctx, {
+      type: 'radar',
+      data: {
+        labels: ['Frontend','Backend','Cloud','Security','Data','UI Motion'],
+        datasets: [{ label: 'Proficiency', data: [85, 70, 65, 72, 60, 88], fill: true }]
+      },
+      options: {
+        responsive: true,
+        scales: { r: { angleLines: { display:false }, suggestedMin: 0, suggestedMax: 100, grid: { circular:true } } },
+        plugins: { legend: { display:false } }
+      }
+    });
+
+    /* ===== Toast helper ===== */
+    const toast = document.getElementById('toast');
+    function openToast(msg){ toast.textContent = msg; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'), 1600); }
+    window.openToast = openToast; // expose for inline handlers if needed
+
+    /* ===== Clipboard ===== */
+    const EMAIL = 'miidhunraj@gmail.com';
+    document.getElementById('copyEmail').addEventListener('click', async ()=>{
+      try { await navigator.clipboard.writeText(EMAIL); openToast('Email copied ✨'); } catch(e){ openToast('Copy failed'); }
+    });
+
+    /* ===== Read more + Surprise buttons (fixed to work) ===== */
+    document.getElementById('readMore').addEventListener('click', ()=>{
+      openToast('Scrolling to About details…');
+      window.location.hash = '#skills';
+    });
+    document.getElementById('surprise').addEventListener('click', ()=>{
+      gsap.to('.logo', { scale:1.25, yoyo:true, repeat:1, duration:.3, ease:'power2.out' });
+      openToast('✨ You found an easter egg!');
+    });
+
+    /* ===== Project buttons (working handlers) ===== */
+    document.querySelectorAll('[data-demo]').forEach(b=> b.addEventListener('click', (e)=>{ e.preventDefault(); openToast('Demo link is a placeholder 😄'); }));
+    document.querySelectorAll('[data-repo]').forEach(b=> b.addEventListener('click', (e)=>{ e.preventDefault(); openToast('Repo is private for now'); }));
+    document.querySelectorAll('[data-case]').forEach(b=> b.addEventListener('click', (e)=>{ e.preventDefault(); openToast('Case study coming soon'); }));
+    document.querySelectorAll('[data-private]').forEach(b=> b.addEventListener('click', (e)=>{ e.preventDefault(); openToast('Private'); }));
+    document.querySelectorAll('[data-writeup]').forEach(b=> b.addEventListener('click', (e)=>{ e.preventDefault(); openToast('Write‑up in progress'); }));
+
+    /* ===== Command Palette (Ctrl/Cmd+K) ===== */
+    const palette = document.getElementById('cmd');
+    const input = document.getElementById('cmdInput');
+    const results = document.getElementById('cmdResults');
+    const openCmd = ()=>{ palette.classList.add('open'); input.focus(); input.value=''; renderCmd(); };
+    const closeCmd = ()=>{ palette.classList.remove('open'); };
+    document.getElementById('openCmd').addEventListener('click', openCmd);
+    window.addEventListener('keydown', (e)=>{
+      if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); openCmd(); }
+      if(e.key==='Escape') closeCmd();
+    });
+    const cmds = [
+      { icon:'user', text:'Go to About', run:()=>location.hash='#about' },
+      { icon:'folder-kanban', text:'Go to Projects', run:()=>location.hash='#projects' },
+      { icon:'sparkles', text:'Go to Skills', run:()=>location.hash='#skills' },
+      { icon:'mail', text:'Go to Contact', run:()=>location.hash='#contact' },
+      { icon:'moon', text:'Toggle Theme', run:()=>document.body.classList.toggle('light') },
+    ];
+    function renderCmd(){
+      results.innerHTML = '';
+      cmds.forEach(c=>{
+        const row = document.createElement('div'); row.className='row'; row.innerHTML = `<i data-lucide="${c.icon}"></i> <span>${c.text}</span>`; row.onclick = ()=>{ c.run(); closeCmd(); if(window.lucide) lucide.createIcons(); };
+        results.appendChild(row);
+      });
+      if(window.lucide) lucide.createIcons();
+    }
+    input.addEventListener('input', ()=>{
+      const q = input.value.toLowerCase();
+      Array.from(results.children).forEach(row=>{
+        row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+      })
+    });
+    palette.addEventListener('click', (e)=>{ if(e.target===palette) closeCmd(); });
+
+    /* ===== Theme toggle ===== */
+    const themeBtn = document.getElementById('themeToggle');
+    themeBtn.addEventListener('click', ()=>{ document.body.classList.toggle('light'); if(window.lucide) lucide.createIcons(); });
+
+    /* ===== Dynamic year ===== */
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    /* ===== Download Resume (client-side generated) ===== */
+    document.getElementById('downloadCV').addEventListener('click', ()=>{
+      const lines = [
+        'MIDHUN RAJ',
+        'AI • Cloud • Cybersecurity — Portfolio Resume',
+        '',
+        'Education: BCA, Srinivas University (Add-ons: AI, AWS Cloud, Data Analytics)',
+        'Skills: JS/TS, React/Node, Postgres, AWS (S3, EC2, Lambda), Docker, Security (OWASP, Nmap), GSAP',
+        'Projects: Secure Admin Portal, AWS Cost Optimizer, Recon & Reporting',
+        'Contact: ' + EMAIL,
+      ].join('\n');
+      const blob = new Blob([lines], {type:'text/plain'});
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Midhun_Raj_Resume.txt'; a.click(); URL.revokeObjectURL(a.href);
+    });
+
+    /* ===== Accessibility niceties ===== */
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        // preserve smooth scroll + focus target section
+        const id = a.getAttribute('href').slice(1);
+        const t = document.getElementById(id);
+        if(t){ e.preventDefault(); t.setAttribute('tabindex','-1'); t.focus({ preventScroll:true }); t.scrollIntoView({ behavior:'smooth' }); setTimeout(()=>t.removeAttribute('tabindex'), 1000); }
+      });
+    });
+  </script>
+</body>
+</html>
